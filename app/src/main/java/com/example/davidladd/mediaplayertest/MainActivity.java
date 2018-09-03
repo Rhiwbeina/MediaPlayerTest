@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.app.ActivityCompat;
@@ -20,12 +21,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    MediaPlayer mp;
+    //MediaPlayer mp;
+    DavesMediaPlayer dmp;
     Button button;
     EditText editText;
     final String TAG = "Dave";
     DavesTTS TTS;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,48 +57,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Log.d(TAG, "but val =  " + button.getText());
-                if (button.getText() == "Start"){
+                if (button.getText() != "Stop"){
                     button.setText("Stop");
                     Log.d(TAG, "Trying to start player");
                     TTS.sayIt("Starting PLayback of " + editText.getText().toString());
-                    mp = new MediaPlayer();
-                    mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            Log.d(TAG, "onPrepared: so ready");
-
-                            mp.start();
-                        }
-                    });
-                    try{
-
-                        mp.setDataSource(editText.getText().toString());
-                        mp.prepareAsync();
-                    }
-                    catch (Exception eee){
-                        Log.d(TAG, "onClick: error" + eee);
-                    }
-
-
+                    dmp = new DavesMediaPlayer();
+                    dmp.playSong(editText.getText().toString());
+                    //mp = new MediaPlayer();
 
                 } else {
                     button.setText("Start");
                     Log.d(TAG, "Trying to stop player");
                     TTS.sayIt("Trying to stop the media player.");
-                    if (mp != null){
-                        mp.release();
-                    }
-
-
-
+                    dmp.stopSong();
                 }
-
-
 
             }
         });
 
-
+        //handler = new Handler();
     }
 
 
