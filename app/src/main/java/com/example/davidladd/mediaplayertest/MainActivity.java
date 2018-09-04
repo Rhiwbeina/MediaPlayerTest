@@ -2,8 +2,7 @@ package com.example.davidladd.mediaplayertest;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
+
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -15,18 +14,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    //MediaPlayer mp;
-    DavesMediaPlayer dmp;
+    static DavesMediaPlayer dmp;
+    static DavesMediaFinder dmf;
     Button button;
-    EditText editText;
+    static EditText editText;
     final String TAG = "Dave";
-    DavesTTS TTS;
+    static DavesTTS TTS;
+    Handler mainHandler;
+    MainActivity mInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,24 +57,42 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "but val =  " + button.getText());
                 if (button.getText() != "Stop"){
                     button.setText("Stop");
-                    Log.d(TAG, "Trying to start player");
-                    TTS.sayIt("Starting PLayback of " + editText.getText().toString());
-                    dmp = new DavesMediaPlayer();
-                    dmp.playSong(editText.getText().toString());
-                    //mp = new MediaPlayer();
+                    Log.d(TAG, "choosing a song");
+                    chooseSong();
+                    //dmf.chooseSong("");
 
                 } else {
                     button.setText("Start");
                     Log.d(TAG, "Trying to stop player");
-                    TTS.sayIt("Trying to stop the media player.");
-                    dmp.stopSong();
-                }
 
+                }
             }
         });
-
-        //handler = new Handler();
+        mInstance = this;
+        mainHandler = new Handler();
+        dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
     }
 
+    public static void chooseSong(){
+        dmf.chooseSong("");
+    }
 
+    public static void songChosen(Bundle songBundle){
+        Log.d("Dave", "announceAndPlay: ");
+        if (dmp != null)  dmp.setVolume((float) 0.35, (float) 0.35);
+        final String textToSpeak = "And now the sweet, sweet sound of " + songBundle.getString("artist") + " with the smash hit " + songBundle.getString("title");
+        TTS.sayIt(textToSpeak, songBundle);
+    }
+
+    public static void doneSpeaking(String utteranceId, Bundle songBundle){
+        DavesMediaPlayer odmp = dmp;
+        dmp = new DavesMediaPlayer();
+        //dmp.playSong(songBundle.getString("data"));
+        dmp.playSong(songBundle);
+        odmp.reset();
+    }
+
+    public MainActivity getmInstance() {
+        return mInstance;
+    }
 }
