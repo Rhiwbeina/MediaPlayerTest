@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
-
-import java.util.Dictionary;
 import java.util.HashMap;
 
 import static android.speech.tts.TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID;
 
 public class DavesTTS extends TextToSpeech{
-    TextToSpeech mtts;
+    //TextToSpeech mtts;
     String TAG = "Dave";
     Bundle songBundle;
 

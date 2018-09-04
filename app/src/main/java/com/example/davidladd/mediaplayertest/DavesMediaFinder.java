@@ -70,49 +70,45 @@ public class DavesMediaFinder {
                         query(uri, columns, MediaStore.Audio.Media.TITLE + " LIKE ? AND artist LIKE ?" , searchy, " RANDOM() LIMIT 1 ");
 
                 assert cursor != null;
+                cursor.moveToPosition(0);
 
-                        cursor.moveToPosition(0);
+                titleColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+                title = cursor.getString(titleColumnIndex);
+                artistColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+                artist = cursor.getString(artistColumnIndex);
 
-                        titleColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-                        title = cursor.getString(titleColumnIndex);
-                        artistColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-                        artist = cursor.getString(artistColumnIndex);
+                albumColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                album = cursor.getString(albumColumnIndex);
+                dataColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+                data = cursor.getString(dataColumnIndex);
+                yearColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
+                year = cursor.getString(yearColumnIndex);
 
-                        albumColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-                        album = cursor.getString(albumColumnIndex);
-                        dataColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-                        data = cursor.getString(dataColumnIndex);
-                        yearColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.YEAR);
-                        year = cursor.getString(yearColumnIndex);
+                duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
 
-                        duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-
-                        final String outputDetail = title + " " + artist + " " + album + " " + year + "\n" + data + " -- " + duration + "\n" ;
-                        final Bundle songBundle = new Bundle();
-                        songBundle.putString("title", title);
-                        songBundle.putString("artist",artist);
-                        songBundle.putString("data", data);
-                        songBundle.putString("duration", duration);
+                final String outputDetail = title + " " + artist + " " + album + " " + year + "\n" + data + " -- " + duration + "\n" ;
+                final Bundle songBundle = new Bundle();
+                songBundle.putString("title", title);
+                songBundle.putString("artist",artist);
+                songBundle.putString("data", data);
+                songBundle.putString("duration", duration);
                 //songBundle.putString();
 
-                        Log.d(TAG, "found " + songBundle.toString() );
+                Log.d(TAG, "found " + songBundle.toString() );
 
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(TAG, " detail " + outputDetail);
-                                //MainActivity.songChosen(data);
-                                MainActivity.songChosen(songBundle);
-                            }
-                        });
-
-                        cursor.close();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, " detail " + outputDetail);
+                        //MainActivity.songChosen(data);
+                        MainActivity.songChosen(songBundle);
+                    }
+                });
 
                 cursor.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 

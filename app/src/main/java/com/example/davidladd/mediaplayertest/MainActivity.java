@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -43,9 +42,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 Log.d(TAG, "onInit: Text to Speech ready i guess");
-
             }
-        });        //TTS.sayHello();
+        });
 
         editText = findViewById(R.id.editText);
 
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         DavesMediaPlayer odmp = dmp;
         dmp = new DavesMediaPlayer();
         //dmp.playSong(songBundle.getString("data"));
-        dmp.playSong(songBundle);
+        dmp.playSong(songBundle, odmp);
         odmp.reset();
     }
 
