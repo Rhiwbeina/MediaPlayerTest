@@ -61,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     button.setText("Start");
-                    Log.d(TAG, "Trying to stop player");
-
+                    Log.d(TAG, "Trying to quit");
+                    finish();
+                    System.exit(0);
                 }
             }
         });
