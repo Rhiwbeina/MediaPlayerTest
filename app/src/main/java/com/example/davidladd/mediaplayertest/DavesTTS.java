@@ -13,9 +13,11 @@ public class DavesTTS extends TextToSpeech{
     //TextToSpeech mtts;
     String TAG = "Dave";
     Bundle songBundle;
+    //final MainActivity mainActivity;
 
-    public DavesTTS(Context context, OnInitListener listener) {
+    public DavesTTS(Context context, OnInitListener listener, final MainActivity mainActivity) {
         super(context, listener);
+        //this.mainActivity = mainActivity;
 
         this.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
@@ -26,20 +28,13 @@ public class DavesTTS extends TextToSpeech{
             @Override
             public void onDone(String utteranceId) {
                 Log.d(TAG, "TTS done");
-                MainActivity.doneSpeaking(utteranceId, songBundle);
+                mainActivity.doneSpeaking(utteranceId, songBundle);
             }
 
             @Override
             public void onError(String utteranceId) {
             }
         });
-    }
-
-    public void setUpListener(){
-    }
-
-    public void sayHello(){
-        this.speak("Hello there all you pop pickers.", TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void sayIt(String text, Bundle songBundle){

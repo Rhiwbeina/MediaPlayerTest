@@ -9,30 +9,32 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 public class DavesMediaFinder {
-    String TAG = "Dave";
-    Context context;
-    Handler mHandler;
+    private String TAG = "Dave";
+    private Context context;
+    private Handler mHandler;
+    private MainActivity mainActivity;
 
-    int titleColumnIndex;
-    String title;
+    private int titleColumnIndex;
+    private String title;
 
-    int artistColumnIndex;
-    String artist;
+    private int artistColumnIndex;
+    private String artist;
 
-    int dataColumnIndex;
-    String data;
+    private int dataColumnIndex;
+    private String data;
 
-    int albumColumnIndex;
-    String album;
+    private int albumColumnIndex;
+    private String album;
 
-    int yearColumnIndex;
-    String year;
+    private int yearColumnIndex;
+    private String year;
 
-    String duration;
+    private String duration;
 
-    public DavesMediaFinder(Context ctx, Handler hdr) {
+    public DavesMediaFinder( Handler hdr, Context ctx, MainActivity mainActivity) {
         this.context = ctx;
         this.mHandler = hdr;
+        this.mainActivity = mainActivity;
     }
 
     public void  chooseSong(String search){
@@ -57,17 +59,15 @@ public class DavesMediaFinder {
         @Override
         public void run() {
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            int imageCounter = 0;
-            //Context myAppContext = c;
 
             Log.d(TAG, "run: " + uri.getPath());
-            String search = MediaStore.Audio.Media.TITLE + " LIKE ? ";
+            //String search = MediaStore.Audio.Media.TITLE + " LIKE ? ";
             //String[] searchy = {"%w%"};
-            String[] searchy = {"%" + searchString + "%", "%" + searchString + "%"};
+            String[] searchy = {"%" + searchString + "%", "30000"};
             try {
                 //Cursor cursor = myAppContext.getContentResolver().query(uri, columns, MediaStore.Audio.Media.TITLE + " LIKE ? ", searchy, null);
                 Cursor cursor =context.getContentResolver().
-                        query(uri, columns, MediaStore.Audio.Media.TITLE + " LIKE ? AND artist LIKE ?" , searchy, " RANDOM() LIMIT 1 ");
+                        query(uri, columns, MediaStore.Audio.Media.TITLE + " LIKE ? AND duration > ?" , searchy, " RANDOM() LIMIT 1 ");
 
                 assert cursor != null;
                 cursor.moveToPosition(0);
@@ -101,7 +101,7 @@ public class DavesMediaFinder {
                     public void run() {
                         Log.d(TAG, " detail " + outputDetail);
                         //MainActivity.songChosen(data);
-                        MainActivity.songChosen(songBundle);
+                        mainActivity.songChosen(songBundle);
                     }
                 });
 

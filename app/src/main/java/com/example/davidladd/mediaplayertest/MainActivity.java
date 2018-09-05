@@ -16,12 +16,12 @@ import android.widget.EditText;
 
 
 public class MainActivity extends AppCompatActivity {
-    static DavesMediaPlayer dmp;
-    static DavesMediaFinder dmf;
+    DavesMediaPlayer dmp;
+    //static DavesMediaFinder dmf;
     Button button;
-    static EditText editText;
+    EditText editText;
     final String TAG = "Dave";
-    static DavesTTS TTS;
+    DavesTTS TTS;
     Handler mainHandler;
     MainActivity mInstance;
 
@@ -38,12 +38,15 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
         }
 
+        mInstance = this;
+        mainHandler = new Handler();
+
         TTS = new DavesTTS(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 Log.d(TAG, "onInit: Text to Speech ready i guess");
             }
-        });
+        }, mInstance);
 
         editText = findViewById(R.id.editText);
 
@@ -67,25 +70,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mInstance = this;
-        mainHandler = new Handler();
-        dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
+
+        //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
     }
 
-    public static void chooseSong(){
+
+    public void chooseSong(){
+        DavesMediaFinder dmf = new DavesMediaFinder( this.mainHandler, this.getApplicationContext(), this.mInstance);
         dmf.chooseSong("");
     }
 
-    public static void songChosen(Bundle songBundle){
+    public void songChosen(Bundle songBundle){
         Log.d("Dave", "announceAndPlay: ");
         if (dmp != null)  dmp.setVolume((float) 0.35, (float) 0.35);
         final String textToSpeak = "And now the sweet, sweet sound of " + songBundle.getString("artist") + " with the smash hit " + songBundle.getString("title");
         TTS.sayIt(textToSpeak, songBundle);
     }
 
-    public static void doneSpeaking(String utteranceId, Bundle songBundle){
+    public void doneSpeaking(String utteranceId, Bundle songBundle){
         DavesMediaPlayer odmp = dmp;
-        dmp = new DavesMediaPlayer();
+        dmp = new DavesMediaPlayer(mInstance);
+
         //dmp.playSong(songBundle.getString("data"));
         dmp.playSong(songBundle, odmp);
         odmp.reset();

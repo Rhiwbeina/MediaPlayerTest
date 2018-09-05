@@ -8,8 +8,10 @@ import android.util.Log;
 public class DavesMediaPlayer extends MediaPlayer {
     String TAG = "Dave";
     private volatile DavesMediaPlayer oldDMP;
+    private MainActivity mainActivity;
 
-    public DavesMediaPlayer() {
+    public DavesMediaPlayer(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
 
         this.setOnPreparedListener(new OnPreparedListener() {
             @Override
@@ -43,7 +45,7 @@ public class DavesMediaPlayer extends MediaPlayer {
             public void run()
             {
                 Log.d(TAG, "runnable: 30 seconds left so choose next song");
-                MainActivity.chooseSong();
+                mainActivity.chooseSong();
                 //handler.postDelayed(this, 1000);
             }
         };
