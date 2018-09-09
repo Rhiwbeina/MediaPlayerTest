@@ -3,6 +3,8 @@ package com.example.davidladd.mediaplayertest;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
@@ -14,16 +16,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.InputStream;
+
 
 public class MainActivity extends AppCompatActivity {
     DavesMediaPlayer dmp;
     //static DavesMediaFinder dmf;
-    Button button;
+    Button button, buttgong;
     EditText editText;
     final String TAG = "Dave";
     DavesTTS TTS;
     Handler mainHandler;
     MainActivity mInstance;
+    davesSpeechComposer dsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +78,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
-    }
+        buttgong = findViewById(R.id.buttgong);
+        buttgong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: gonged");
+                dmp.handler.removeCallbacks(dmp.rr);
+                dmp.handler.postDelayed(dmp.rr, 500);
+                //chooseSong();
+            }
+        });
 
+        //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
+         dsc = new davesSpeechComposer(getApplicationContext());
+    }
 
     public void chooseSong(){
         DavesMediaFinder dmf = new DavesMediaFinder( this.mainHandler, this.getApplicationContext(), this.mInstance);
@@ -81,17 +99,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void songChosen(Bundle songBundle){
-        Log.d("Dave", "announceAndPlay: ");
+        Log.d("Dave", "songChosen so dip vol and start speaking ");
+        //final String sss = this.dsc.TAG;
+        //Log.d(TAG, "songChosen: sentence " + dsc.getSentence(songBundle));
         if (dmp != null)  dmp.setVolume((float) 0.35, (float) 0.35);
-        final String textToSpeak = "And now the sweet, sweet sound of " + songBundle.getString("artist") + " with the smash hit " + songBundle.getString("title");
+        final String textToSpeak = dsc.getSentence(songBundle);
+        //final String textToSpeak = "And now the sweet, sweet sound of " + songBundle.getString("artist") + " with the smash hit " + songBundle.getString("title");
         TTS.sayIt(textToSpeak, songBundle);
     }
 
     public void doneSpeaking(String utteranceId, Bundle songBundle){
+        Log.d(TAG, "doneSpeaking: ");
         DavesMediaPlayer odmp = dmp;
         dmp = new DavesMediaPlayer(mInstance);
-
-        //dmp.playSong(songBundle.getString("data"));
         dmp.playSong(songBundle, odmp);
         odmp.reset();
     }

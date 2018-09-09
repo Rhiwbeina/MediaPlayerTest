@@ -90,6 +90,8 @@ public class DavesMediaFinder {
                 final Bundle songBundle = new Bundle();
                 songBundle.putString("title", title);
                 songBundle.putString("artist",artist);
+                songBundle.putString("album", album);
+                songBundle.putString("year", year);
                 songBundle.putString("data", data);
                 songBundle.putString("duration", duration);
                 //songBundle.putString();
@@ -99,7 +101,7 @@ public class DavesMediaFinder {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, " detail " + outputDetail);
+                        Log.d(TAG, " posting to MainActivity.songChosen " + outputDetail);
                         //MainActivity.songChosen(data);
                         mainActivity.songChosen(songBundle);
                     }

@@ -9,6 +9,8 @@ public class DavesMediaPlayer extends MediaPlayer {
     String TAG = "Dave";
     private volatile DavesMediaPlayer oldDMP;
     private MainActivity mainActivity;
+    Runnable rr;
+    Handler handler;
 
     public DavesMediaPlayer(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -39,8 +41,10 @@ public class DavesMediaPlayer extends MediaPlayer {
     }
 
     public void startMyTimer(int duration){
-        final Handler handler = new Handler();
-        final Runnable r = new Runnable()
+        //final Handler
+                handler = new Handler();
+        //final Runnable
+                rr = new Runnable()
         {
             public void run()
             {
@@ -49,7 +53,7 @@ public class DavesMediaPlayer extends MediaPlayer {
                 //handler.postDelayed(this, 1000);
             }
         };
-        handler.postDelayed(r, duration);
+        handler.postDelayed(rr, duration);
     }
 
 }
