@@ -40,12 +40,14 @@ public class davesSpeechComposer {
             Log.d(TAG, "davesSpeechComposer: creating pref data ");
             SharedPreferences.Editor shpedit = mPreferences.edit();
             // putStringSet: editing a string will not be saved, must change number of strings or delete the file
-            intros.add("Next up on the show [artist] with the smash hit [title]");
-            intros.add("Now from the [year] album [album]. [artist] with [title] ");
-            intros.add("Back in time to [year] with [artist]");
-            intros.add("Now then [title]");
+            intros.add("Next up on the show, [artist], with the smash hit [title].");
+            intros.add("Now. From the [year] album, [album]. [artist], with [title] ");
+            intros.add("What were you doing back in [year]? Here's [artist]");
+            intros.add("[title], need I say more?");
 
-            outros.add("Nice to hear [artist] again.");
+            outros.add("Good to hear [artist] again.");
+            outros.add("Wow, that takes me back. [year] to be precise.");
+            outros.add("[title]. For sure.");
 
             shpedit.putInt("sentanceCount", intros.size());
             shpedit.putStringSet("intros", intros);
