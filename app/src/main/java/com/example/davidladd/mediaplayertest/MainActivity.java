@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }, mInstance);
 
-        editText = findViewById(R.id.editText);
+        editText = findViewById(R.id.editText2);
 
         button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         if (dmp != null)  dmp.setVolume((float) 0.35, (float) 0.35);
         final String textToSpeak = dsc.getSentence(songBundle);
         //final String textToSpeak = "And now the sweet, sweet sound of " + songBundle.getString("artist") + " with the smash hit " + songBundle.getString("title");
+editText.setText(textToSpeak);
         TTS.sayIt(textToSpeak, songBundle);
     }
 

@@ -43,7 +43,9 @@ public class DavesTTS extends TextToSpeech{
         hashtts.put(KEY_PARAM_UTTERANCE_ID, "1");
 
         Log.d(TAG, "sayIt: " + text);
-        this.speak(text, TextToSpeech.QUEUE_FLUSH, hashtts);
+        //this.speak("             ." + text, TextToSpeech.QUEUE_FLUSH, hashtts);
+        // Have to add spaces and period to allow delay after music dip
+        this.speak("             ." + text, TextToSpeech.QUEUE_ADD, hashtts);
     }
 
 }

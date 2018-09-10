@@ -1,6 +1,7 @@
 package com.example.davidladd.mediaplayertest;
 
 import android.media.MediaPlayer;
+import android.media.VolumeShaper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,8 +21,10 @@ public class DavesMediaPlayer extends MediaPlayer {
             public void onPrepared(MediaPlayer mp) {
                 Log.d(TAG, "on music Prepared: duration is " + DavesMediaPlayer.super.getDuration());
                 DavesMediaPlayer.super.start();
-                //startMyTimer(DavesMediaPlayer.super.getDuration() - 30000);
-                startMyTimer(20000);
+
+
+                startMyTimer(DavesMediaPlayer.super.getDuration() - 15000);
+                //startMyTimer(20000);
                 if(oldDMP != null) oldDMP.reset();
                 }
         });
