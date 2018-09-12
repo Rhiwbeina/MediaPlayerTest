@@ -132,7 +132,11 @@ public class davesSpeechComposer {
                 itIsSafe = false;
             }
         }
-
+        if (songBundle.getString("artist") == null || songBundle.getString("artist") == "<unknown>"){
+            if (sentence.contains("[artist]")){
+                itIsSafe = false;
+            }
+        }
         return itIsSafe;
     }
 }

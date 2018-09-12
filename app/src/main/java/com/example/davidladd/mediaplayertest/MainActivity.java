@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: gonged");
+                buttgong.setText("gonged !");
                 dmp.handler.removeCallbacks(dmp.rr);
                 dmp.handler.postDelayed(dmp.rr, 500);
                 //chooseSong();

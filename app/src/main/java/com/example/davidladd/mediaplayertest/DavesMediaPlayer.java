@@ -13,7 +13,7 @@ public class DavesMediaPlayer extends MediaPlayer {
     Runnable rr;
     Handler handler;
 
-    public DavesMediaPlayer(MainActivity mainActivity) {
+    public DavesMediaPlayer(final MainActivity mainActivity) {
         this.mainActivity = mainActivity;
 
         this.setOnPreparedListener(new OnPreparedListener() {
@@ -21,7 +21,7 @@ public class DavesMediaPlayer extends MediaPlayer {
             public void onPrepared(MediaPlayer mp) {
                 Log.d(TAG, "on music Prepared: duration is " + DavesMediaPlayer.super.getDuration());
                 DavesMediaPlayer.super.start();
-
+                mainActivity.buttgong.setText("gong");
 
                 startMyTimer(DavesMediaPlayer.super.getDuration() - 15000);
                 //startMyTimer(20000);
