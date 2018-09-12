@@ -48,18 +48,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/trannyrad"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editText2"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:text="dfgdg"
-                tools:layout_editor_absoluteX="96dp"
-                tools:layout_editor_absoluteY="200dp" />
+                android:paddingBottom="100dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="70dp">
+
+                <EditText
+                    android:id="@+id/editText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:text="dfgdg"
+                    android:textColor="?android:attr/colorBackground"
+                    tools:layout_editor_absoluteX="96dp"
+                    tools:layout_editor_absoluteY="200dp" />
+            </FrameLayout>
+
         </LinearLayout>
 
     </LinearLayout>
