@@ -5,7 +5,10 @@ import android.content.pm.PackageManager;
 
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     DavesMediaPlayer dmp;
     //static DavesMediaFinder dmf;
     Button button, buttgong;
-    EditText editText;
+    TextView editText, textViewLibraryCount;
     final String TAG = "Dave";
     DavesTTS TTS;
     Handler mainHandler;
@@ -92,11 +95,36 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
+        textViewLibraryCount = findViewById(R.id.textViewLibraryCount);
+
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+        String[] columns = {MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.YEAR,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.DATA
+        };
+
+        String[] searchy = {"%" + "" + "%", "30000"};
+        try {
+            Cursor cursor = getContentResolver().query(uri, columns,  MediaStore.Audio.Media.TITLE + " LIKE ? AND duration > ?" , searchy, null);
+
+            assert cursor != null;
+            Log.d(TAG, "onCreate: Library count = " + String.valueOf(cursor.getCount()));
+            textViewLibraryCount.setText("Soungs found in library: " + String.valueOf(cursor.getCount()) );
+        }
+        catch( Exception eee){
+            Log.d(TAG, "onCreate: error " + eee);
+        }
+
          dsc = new davesSpeechComposer(getApplicationContext());
     }
 
     public void chooseSong(){
         DavesMediaFinder dmf = new DavesMediaFinder( this.mainHandler, this.getApplicationContext(), this.mInstance);
+
         dmf.chooseSong("");
     }
 

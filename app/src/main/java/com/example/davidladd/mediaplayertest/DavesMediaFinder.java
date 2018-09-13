@@ -70,6 +70,7 @@ public class DavesMediaFinder {
                         query(uri, columns, MediaStore.Audio.Media.TITLE + " LIKE ? AND duration > ?" , searchy, " RANDOM() LIMIT 1 ");
 
                 assert cursor != null;
+                //cursor.getCount()
                 cursor.moveToPosition(0);
 
                 titleColumnIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
