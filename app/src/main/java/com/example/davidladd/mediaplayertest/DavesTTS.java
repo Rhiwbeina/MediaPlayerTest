@@ -26,9 +26,20 @@ public class DavesTTS extends TextToSpeech{
             }
 
             @Override
-            public void onDone(String utteranceId) {
+            public void onDone(final String utteranceId) {
                 Log.d(TAG, "TTS done");
-                mainActivity.doneSpeaking(utteranceId, songBundle);
+                //mainActivity.doneSpeaking(utteranceId, songBundle);
+                Runnable rr = new Runnable()
+                {
+                    public void run()
+                    {
+                        Log.d(TAG, "runnable: post calling donespeaking");
+                        mainActivity.doneSpeaking(utteranceId, songBundle);
+                        //handler.postDelayed(this, 1000);
+                    }
+                };
+                mainActivity.mainHandler.postDelayed(rr, 10);
+
             }
 
             @Override
@@ -45,6 +56,7 @@ public class DavesTTS extends TextToSpeech{
         Log.d(TAG, "sayIt: " + text);
         //this.speak("             ." + text, TextToSpeech.QUEUE_FLUSH, hashtts);
         // Have to add spaces and period to allow delay after music dip
+        this.setSpeechRate(1.2f);
         this.speak("             ." + text, TextToSpeech.QUEUE_ADD, hashtts);
     }
 

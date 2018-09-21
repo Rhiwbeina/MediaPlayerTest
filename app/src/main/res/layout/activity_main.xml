@@ -9,8 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/radio_grill">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,7 +54,8 @@
                 android:id="@+id/textViewLibraryCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/textViewLibraryCount" />
+                android:text="@string/textViewLibraryCount"
+                android:textAlignment="center" />
         </LinearLayout>
 
         <LinearLayout

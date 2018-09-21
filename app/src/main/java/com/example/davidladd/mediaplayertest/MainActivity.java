@@ -3,8 +3,6 @@ package com.example.davidladd.mediaplayertest;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -17,16 +15,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import org.xmlpull.v1.XmlPullParser;
-
-import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
-    DavesMediaPlayer dmp;
+    DavesMediaPlayer dmp, odmp;
     //static DavesMediaFinder dmf;
     Button button, buttgong;
     TextView editText, textViewLibraryCount;
@@ -88,36 +81,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: gonged");
                 buttgong.setText("gonged !");
-                dmp.handler.removeCallbacks(dmp.rr);
-                dmp.handler.postDelayed(dmp.rr, 500);
+                //dmp.handler.removeCallbacks(dmp.rr);
+                mainHandler.removeCallbacks(dmp.rr);
+                //dmp.handler.postDelayed(dmp.rr, 500);
+                mainHandler.postDelayed(dmp.rr, 500);
                 //chooseSong();
             }
         });
 
         //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
         textViewLibraryCount = findViewById(R.id.textViewLibraryCount);
-
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
-        String[] columns = {MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.YEAR,
-                MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.DATA
-        };
-
-        String[] searchy = {"%" + "" + "%", "30000"};
-        try {
-            Cursor cursor = getContentResolver().query(uri, columns,  MediaStore.Audio.Media.TITLE + " LIKE ? AND duration > ?" , searchy, null);
-
-            assert cursor != null;
-            Log.d(TAG, "onCreate: Library count = " + String.valueOf(cursor.getCount()));
-            textViewLibraryCount.setText("Soungs found in library: " + String.valueOf(cursor.getCount()) );
-        }
-        catch( Exception eee){
-            Log.d(TAG, "onCreate: error " + eee);
-        }
+        textViewLibraryCount.setText("Songs in library " + getLibraryCount());
+        //textViewLibraryCount.setText(getDate());
 
          dsc = new davesSpeechComposer(getApplicationContext());
     }
@@ -136,18 +111,56 @@ public class MainActivity extends AppCompatActivity {
         final String textToSpeak = dsc.getSentence(songBundle);
         //final String textToSpeak = "And now the sweet, sweet sound of " + songBundle.getString("artist") + " with the smash hit " + songBundle.getString("title");
 editText.setText(textToSpeak);
+odmp = dmp;
+        dmp = new DavesMediaPlayer(mInstance);
+        dmp.prepSong(songBundle);
+//dmp
         TTS.sayIt(textToSpeak, songBundle);
     }
 
     public void doneSpeaking(String utteranceId, Bundle songBundle){
         Log.d(TAG, "doneSpeaking: ");
-        DavesMediaPlayer odmp = dmp;
-        dmp = new DavesMediaPlayer(mInstance);
-        dmp.playSong(songBundle, odmp);
-        odmp.reset();
+
+        if(dmp.prepared){
+            dmp.playSong(songBundle, odmp);
+            buttgong.setText("gong me");
+        }
+
+        if (odmp != null) odmp.reset();
     }
 
     public MainActivity getmInstance() {
         return mInstance;
     }
+
+    public String getLibraryCount() {
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+        String[] columns = {MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.YEAR,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.DATA
+        };
+
+        String libraryCount = "";
+        String[] searchy = {"%" + "" + "%", "30000"};
+        try {
+            Cursor cursor = getContentResolver().query(uri, columns,  MediaStore.Audio.Media.TITLE + " LIKE ? AND duration > ?" , searchy, null);
+
+            assert cursor != null;
+            libraryCount = String.valueOf(cursor.getCount());
+            Log.d(TAG, "onCreate: Library count = " + String.valueOf(cursor.getCount()));
+            cursor.close();
+            //textViewLibraryCount.setText("Soungs found in library: " + String.valueOf(cursor.getCount()) );
+        }
+        catch( Exception eee){
+            Log.d(TAG, "onCreate: error " + eee);
+            libraryCount = "error";
+        }
+        return libraryCount;
+    }
+
+
 }

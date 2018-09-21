@@ -1,37 +1,35 @@
 package com.example.davidladd.mediaplayertest;
 
 import android.media.MediaPlayer;
-import android.media.VolumeShaper;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 public class DavesMediaPlayer extends MediaPlayer {
     String TAG = "Dave";
-    private volatile DavesMediaPlayer oldDMP;
+    //private volatile DavesMediaPlayer oldDMP;
     private MainActivity mainActivity;
     Runnable rr;
-    Handler handler;
+    boolean prepared;
+    //Handler handler;
 
     public DavesMediaPlayer(final MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+        prepared = false;
 
         this.setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 Log.d(TAG, "on music Prepared: duration is " + DavesMediaPlayer.super.getDuration());
-                DavesMediaPlayer.super.start();
-                mainActivity.buttgong.setText("gong");
-
-                startMyTimer(DavesMediaPlayer.super.getDuration() - 15000);
-                //startMyTimer(20000);
-                if(oldDMP != null) oldDMP.reset();
+                prepared = true;
+                //DavesMediaPlayer.super.start();
+                //mainActivity.buttgong.setText("gong");
+                //startMyTimer(DavesMediaPlayer.super.getDuration() - 15000);
                 }
         });
     }
 
-    public void playSong(Bundle songBundle, DavesMediaPlayer odmp){
-        this.oldDMP = odmp;
+    public void prepSong(Bundle songBundle){
+        //this.oldDMP = odmp;
         try{
             final String pathToSong = songBundle.getString("data");
             Log.d(TAG, "playSong: "  + pathToSong);
@@ -43,20 +41,30 @@ public class DavesMediaPlayer extends MediaPlayer {
         }
     }
 
+    public  void playSong(Bundle songBundle, DavesMediaPlayer odmp){
+        DavesMediaPlayer.super.start();
+        //mainActivity.buttgong.setText("gong");
+
+        startMyTimer(DavesMediaPlayer.super.getDuration() - 15000);
+        //startMyTimer(20000);
+        //if(oldDMP != null) oldDMP.reset();
+    }
+
     public void startMyTimer(int duration){
         //final Handler
-                handler = new Handler();
+                //this.mainActivity.mainHandlerhandler = new Handler();
         //final Runnable
                 rr = new Runnable()
         {
             public void run()
             {
-                Log.d(TAG, "runnable: 30 seconds left so choose next song");
+                Log.d(TAG, "runnable: coming to the end so choose next song");
                 mainActivity.chooseSong();
                 //handler.postDelayed(this, 1000);
             }
         };
-        handler.postDelayed(rr, duration);
+        this.mainActivity.mainHandler.postDelayed(rr, duration);
     }
+
 
 }

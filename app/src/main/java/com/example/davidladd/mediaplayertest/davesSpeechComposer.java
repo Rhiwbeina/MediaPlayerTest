@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,6 +28,7 @@ public class davesSpeechComposer {
     Set<String> outros = new HashSet<String>();
     List<String> introsList = new ArrayList<String>();
     List<String> outrosList = new ArrayList<String>();
+    //List<String> timeCheckList = new ArrayList<String>();
     Bundle previousSongBundle;
 
     public davesSpeechComposer(Context context) {
@@ -40,14 +45,14 @@ public class davesSpeechComposer {
             Log.d(TAG, "davesSpeechComposer: creating pref data ");
             SharedPreferences.Editor shpedit = mPreferences.edit();
             // putStringSet: editing a string will not be saved, must change number of strings or delete the file
-            intros.add("Next up on the show, [artist], with the smash hit [title].");
+            intros.add("How about, [artist], with the smash hit [title].");
             intros.add("Now. From the [year] album, [album]. [artist], with [title] ");
             intros.add("What were you doing back in [year]? Here's [artist]");
-            intros.add("[title], need I say more?");
+            intros.add("[title], indeed.");
 
             outros.add("Good to hear [artist] again.");
             outros.add("Wow, that takes me back. [year] to be precise.");
-            outros.add("[title]. For sure.");
+            outros.add("The awesome, [title]. For sure.");
 
             shpedit.putInt("sentanceCount", intros.size());
             shpedit.putStringSet("intros", intros);
@@ -81,6 +86,7 @@ public class davesSpeechComposer {
             Log.d(TAG, "getSentence: previous bund = NOT EMPTY " + previousSongBundle.toString());
             fullText = " " + getPartSentence(previousSongBundle, outrosList);
         }
+        fullText = fullText + " " + getTimeCheck();
         fullText = fullText + " " + getPartSentence(songBundle, introsList);
 
         previousSongBundle = songBundle;
@@ -138,5 +144,29 @@ public class davesSpeechComposer {
             }
         }
         return itIsSafe;
+    }
+
+    public String getTimeCheck() {
+        List<String> timeCheckList = new ArrayList<String>();
+timeCheckList.add("'Time for a time check. its 'EEEE'.'");
+timeCheckList.add("'Looking at the studio clock I see its 'h m a '.'");
+        timeCheckList.add(" h m a '.'");
+        timeCheckList.add("MMMM ' Already !'");
+        timeCheckList.add("'Hope your 'EEEE' is going smoothly.'");
+        Random r = new Random();
+        int ranint = (r.nextInt(timeCheckList.size()));
+
+        Calendar cal = Calendar.getInstance();
+        Date currentDate = cal.getTime();
+
+        DateFormat dtestf = new SimpleDateFormat("H");
+        String dtest = dtestf.format(currentDate);
+        int hour = Integer.valueOf(dtest);
+        int tod = hour/6;
+        if (tod > 0 && tod < 6 ) timeCheckList.add("wee small hours");
+
+        DateFormat formatter = new SimpleDateFormat(timeCheckList.get(ranint));
+        String formattedDateString = formatter.format(currentDate);
+        return formattedDateString;
     }
 }
