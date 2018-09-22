@@ -9,7 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="104dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,8 +56,10 @@
                 android:id="@+id/textViewLibraryCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autoText="true"
                 android:text="@string/textViewLibraryCount"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,28 +69,35 @@
             android:background="@drawable/trannyrad"
             android:orientation="vertical">
 
-            <FrameLayout
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingBottom="100dp"
-                android:paddingLeft="20sp"
-                android:paddingRight="20dp"
-                android:paddingTop="90sp">
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/editText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="32dp"
+                    android:clickable="false"
                     android:cursorVisible="false"
                     android:editable="false"
-                    android:ems="10"
                     android:inputType="textMultiLine"
                     android:text="RadioShack"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
                     android:textColor="?android:attr/colorBackground"
-                    android:textSize="18sp" />
-            </FrameLayout>
+                    android:textIsSelectable="false"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 

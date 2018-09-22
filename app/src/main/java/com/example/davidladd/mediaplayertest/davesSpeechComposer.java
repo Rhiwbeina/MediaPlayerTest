@@ -46,13 +46,15 @@ public class davesSpeechComposer {
             SharedPreferences.Editor shpedit = mPreferences.edit();
             // putStringSet: editing a string will not be saved, must change number of strings or delete the file
             intros.add("How about, [artist], with the smash hit [title].");
-            intros.add("Now. From the [year] album, [album]. [artist], with [title] ");
+            intros.add("Now. From the [year] album, [album]. [artist], with. [title] ");
             intros.add("What were you doing back in [year]? Here's [artist]");
-            intros.add("[title], indeed.");
+            intros.add("[title].");
 
-            outros.add("Good to hear [artist] again.");
+            outros.add("Awesome to hear [artist] again.");
             outros.add("Wow, that takes me back. [year] to be precise.");
-            outros.add("The awesome, [title]. For sure.");
+            outros.add("The awesome, [title].");
+            outros.add(" cool! ");
+            outros.add("From the seminal, [album], album.");
 
             shpedit.putInt("sentanceCount", intros.size());
             shpedit.putStringSet("intros", intros);
@@ -148,22 +150,29 @@ public class davesSpeechComposer {
 
     public String getTimeCheck() {
         List<String> timeCheckList = new ArrayList<String>();
-timeCheckList.add("'Time for a time check. its 'EEEE'.'");
+timeCheckList.add("'Time for a time check. its 'EEEE h m a'.'");
 timeCheckList.add("'Looking at the studio clock I see its 'h m a '.'");
-        timeCheckList.add(" h m a '.'");
+        timeCheckList.add(" h m '.' ");
         timeCheckList.add("MMMM ' Already !'");
-        timeCheckList.add("'Hope your 'EEEE' is going smoothly.'");
-        Random r = new Random();
-        int ranint = (r.nextInt(timeCheckList.size()));
+        timeCheckList.add(" EEEE 'for crying out loud! ' ");
 
         Calendar cal = Calendar.getInstance();
         Date currentDate = cal.getTime();
 
         DateFormat dtestf = new SimpleDateFormat("H");
         String dtest = dtestf.format(currentDate);
-        int hour = Integer.valueOf(dtest);
-        int tod = hour/6;
-        if (tod > 0 && tod < 6 ) timeCheckList.add("wee small hours");
+        int tod = Integer.valueOf(dtest);
+        String period = "";
+        if (tod > 0 && tod < 6 )period = " 'early morning' ";
+        if (tod > 5 && tod < 12) period = " 'morning' ";
+        if (tod > 11 && tod < 18) period = " 'afternoon' ";
+        if (tod > 17 && tod < 24) period = " 'evening' ";
+        timeCheckList.add("'hope your' " + period + "'is going well.'");
+        timeCheckList.add("'rocking your' EEEE " + period + "'.'");
+        timeCheckList.add("'Playing some chillaxing music this' " + period + "'.'");
+
+        Random r = new Random();
+        int ranint = (r.nextInt(timeCheckList.size()));
 
         DateFormat formatter = new SimpleDateFormat(timeCheckList.get(ranint));
         String formattedDateString = formatter.format(currentDate);

@@ -3,6 +3,7 @@ package com.example.davidladd.mediaplayertest;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 // Check whether this app has write external storage permission or not.
@@ -42,59 +44,66 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
         }
 
-        mInstance = this;
-        mainHandler = new Handler();
 
-        TTS = new DavesTTS(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                Log.d(TAG, "onInit: Text to Speech ready i guess");
-            }
-        }, mInstance);
 
-        editText = findViewById(R.id.editText2);
+            mInstance = this;
+            mainHandler = new Handler();
 
-        button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log.d(TAG, "but val =  " + button.getText());
-                if (button.getText() != "Stop"){
-                    button.setText("Stop");
-                    Log.d(TAG, "choosing a song");
-                    chooseSong();
-                    //dmf.chooseSong("");
-
-                } else {
-                    button.setText("Start");
-                    Log.d(TAG, "Trying to quit");
-                    finish();
-                    System.exit(0);
+            TTS = new DavesTTS(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    Log.d(TAG, "onInit: Text to Speech ready i guess");
                 }
-            }
-        });
+            }, mInstance);
 
-        buttgong = findViewById(R.id.buttgong);
-        buttgong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: gonged");
-                buttgong.setText("gonged !");
-                //dmp.handler.removeCallbacks(dmp.rr);
-                mainHandler.removeCallbacks(dmp.rr);
-                //dmp.handler.postDelayed(dmp.rr, 500);
-                mainHandler.postDelayed(dmp.rr, 500);
-                //chooseSong();
-            }
-        });
+            editText = findViewById(R.id.editText2);
 
-        //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
-        textViewLibraryCount = findViewById(R.id.textViewLibraryCount);
-        textViewLibraryCount.setText("Songs in library " + getLibraryCount());
-        //textViewLibraryCount.setText(getDate());
+            button = findViewById(R.id.button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-         dsc = new davesSpeechComposer(getApplicationContext());
+                    Log.d(TAG, "but val =  " + button.getText());
+                    if (button.getText() != "Stop") {
+                        button.setText("Stop");
+                        Log.d(TAG, "choosing a song");
+                        chooseSong();
+                        //dmf.chooseSong("");
+
+                    } else {
+                        button.setText("Start");
+                        Log.d(TAG, "Trying to quit");
+                        finish();
+                        System.exit(0);
+                    }
+                }
+            });
+
+            buttgong = findViewById(R.id.buttgong);
+            buttgong.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: gonged");
+                    buttgong.setText("gonged !");
+                    //dmp.handler.removeCallbacks(dmp.rr);
+                    mainHandler.removeCallbacks(dmp.rr);
+                    //dmp.handler.postDelayed(dmp.rr, 500);
+                    mainHandler.postDelayed(dmp.rr, 500);
+                    //chooseSong();
+                }
+            });
+
+            //dmf = new DavesMediaFinder(getApplicationContext(), mainHandler);
+            textViewLibraryCount = findViewById(R.id.textViewLibraryCount);
+            textViewLibraryCount.setText("Songs in library " + getLibraryCount());
+            //textViewLibraryCount.setText(getDate());
+
+            dsc = new davesSpeechComposer(getApplicationContext());
+
+    }
+
+    public void configUi(){
+
     }
 
     public void chooseSong(){
